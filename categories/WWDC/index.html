@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="generator" content="Hexo 4.2.1"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Category: WWDC - Corn the blog</title><meta property="og:type" content="blog"><meta property="og:title" content="Corn the blog"><meta property="og:url" content="http://yoursite.com/"><meta property="og:site_name" content="Corn the blog"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://yoursite.com/images/avatar.png"><meta property="article:author" content="John Doe"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="images/avatar.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://yoursite.com"},"headline":"Corn the blog","image":["http://yoursite.com/images/avatar.png"],"author":{"@type":"Person","name":"John Doe"},"description":""}</script><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><div class="card-content"><nav class="breadcrumb" aria-label="breadcrumbs"><ul><li><a href="/categories">Categories</a></li><li class="is-active"><a href="#" aria-current="page">WWDC</a></li></ul></nav></div></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2020-08-23T07:22:27.000Z" title="2020-08-23T07:22:27.000Z">2020-08-23</time><span class="level-item"><a class="link-muted" href="/categories/WWDC/">WWDC</a><span> / </span><a class="link-muted" href="/categories/WWDC/Swift/">Swift</a></span><span class="level-item">10 minutes read (About 1446 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/08/23/Embrace-Swift-type-inference/">Embrace Swift type inference</a></h1><div class="content"><blockquote>
+<p><a href="https://developer.apple.com/videos/play/wwdc2020/10165/">WWDC 2020</a></p>
+</blockquote>
+<p>스위프트는 코드의 안전성을 훼손하지 않고 간결한 코드를 작성하기 위해 <strong>타입 추론(Type inference)</strong>을 광범위하게 사용한다.</p>
+<p>이 영상을 통해 우리는 다음의 것들을 살펴볼 것이다. </p>
+<ol>
+<li>타입 추론을 활용하는 법</li>
+<li>컴파일러에서 타입 추론이 어떻게 동작하는지 </li>
+<li>타입 추론에 의해 발생할 수 있는 에러의 원인과 이를 해결하는 방법 </li>
+</ol>
+<p><strong>What is type inference?</strong></p>
+<p>먼저 타입 추론이 무엇인지 간단하게 알아보자. </p>
+<p>타입 추론은 프로퍼티에 타입을 명시적으로 선언하지 않아도 컴파일러가 문맥에 따라 타입을 추론하는 것을 말한다. </p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/1.png" alt="img"></p>
+<p>위의 코드에서 <code>String</code>을 명시적으로 선언하지 않아도 컴파일러는 이를 <code>String</code>으로 추론한다. 좀 더 복잡한 예제 코드로 타입 추론을 활용하고, 컴파일러에서 타입 추론이 어떻게 동작하는지를 살펴보자. </p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/2.png" alt="img"></p>
+<p>위의 코드에서 <code>FilteredList</code>는 주어진 데이터를 리스트 형태로 보여주고 필터링 기능을 제공하는 재사용 가능한 뷰다. 이 <code>FilteredList</code>는 재사용 가능해야 하므로 기본적으로 생성자 인자들은 제네릭 해야 한다. 위의 코드에서 <code>FilteredList</code>를 사용하면서 따로 타입을 명시해 주지 않고 있다. 이는 컴파일러가 타입 추론을 하기 때문에 가능한 일인데, 이를 좀 더 알아보기 위해 <code>FilteredList</code>가 어떻게 정의되어 있는지 코드로 살펴보도록 하자</p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/3.png" alt="img"></p>
+<p><code>Element</code>, <code>FilterKey</code> 그리고 <code>RowContent</code>는 <code>FileteredList</code>가 생성될 때 실제 타입, 즉 Concrete 타입으로 대체된다. 이제 선언부와 호출부를 나란히 두고 비교해보자.</p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/4.png" alt="img"></p>
+<p>제네릭 타입으로 인해 복잡한 선언부와 비교했을 때 호출부는 훨씬 깔끔한 코드임을 확인할 수 있다. 이는 컴파일러가 주어진 값들로 타입 추론을 하기 때문에 가능한 일인데, 타입 추론이 아닌 명시적으로 타입을 명시한다면 아래와 보다 복잡한 코드를 작성해야 한다.</p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/5.png" alt="글"></p>
+<p>그렇다면 컴파일러는 어떻게 타입 추론을 하는 것일까? 타입 추론은 일종의 퍼즐이라고 할 수 있다. 우린 퍼즐을 하면서 하나의 조각이 맞춰질 때 다음 조각을 자연스럽게 유추할 수 있다. 하나의 퍼즐이 맞춰질 때마다 다음 조각에 대한 단서를 우린 유추할 수 있다. 컴파일러는 이렇게 퍼즐을 풀 듯이 우리의 코드에서 단서를 찾아 퍼즐을 하나씩 맞춰가며 타입을 추론한다. </p>
+<p>위의 코드를 사용해서 컴파일러가 어떻게 퍼즐을 맞춰가는지 살펴보자. </p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/6.png" alt="img"></p>
+<p>먼저 첫 번째로 인자로 넘기는 <code>smoothies</code>라는 단서를 통해 <code>Element</code>의 타입을 추론할 수 있다. <code>smoothies</code>는 <code>[Smoothie]</code> 타입으로 <code>Element</code>는 <code>Smoothie</code> 타입으로 대체된다. </p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/7.png" alt="img"></p>
+<p>우린 <code>Element</code>라는 퍼즐 조각을 맞췄기 때문에 이를 통해 또 다른 단서를 얻을 수 있다. 바로 <code>FilterKey</code>다. <code>\.title</code>은 <code>\Smoothe.title</code>로 대체되고 <code>Smoothie</code>의 <code>title</code> 프로퍼티는 <code>String</code>이란 것을 알 수 있기 때문에 <code>FilterKey</code>는 <code>String</code>으로 대체된다. </p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/8.png" alt="img"></p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/9.png" alt="img"></p>
+<p><code>RowContent</code> 역시 <code>ViewBuilder</code> 클로저 안에서 <code>SmoothieRowView</code>가 반환되기 때문에 <code>SmoothieRowView</code>로 대체될 수 있다. </p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/10.png" alt="img"></p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/11.png" alt="img"></p>
+<p>이런 식으로 컴파일러는 이전 단계의 단서를 통해 하나씩 타입을 추론해 나간다. 하지만 이렇게 얻은 이전 단계의 퍼즐 조각(단서)이 맞지 않는다면 소스 코드에 에러가 발생했다는 것을 의미한다. 즉 맞지 않은 타입이 들어갔기 때문에 컴파일러는 더 이상 타입 추론을 진행할 수 없다.</p>
+<p><code>Smoothie.title</code>이 아닌 <code>Bool</code> 타입의 <code>Smoothie.isPopular</code>로 바꿔보자</p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/12.png" alt="img"></p>
+<p>그렇다면 컴파일러는 <code>Bool</code> 타입을 <code>FilterKey</code>의 조각으로 사용할 것이다. 하지만 <code>Bool</code> 타입은 <code>hasSubString(_:)</code> 메서드가 없기 때문에 이후의 타입 추론을 진행할 수 없고, 에러를 뱉는다. </p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/13.png" alt="img"></p>
+<p>이렇게 스위프트 컴파일러는 추후에 에러 메시지를 출력할 때 사용하기 위해 에러 추적 기능을 타입 추론에 통합시켰다. 컴파일러는 타입 추론을 진행하면서 직면한 에러를 기록한다. 그리고 컴파일러는 에러를 고치고 타입 추론을 계속 진행하기 위해 <a href="https://ko.wikipedia.org/wiki/휴리스틱_이론">휴리스틱</a>을 사용한다.</p>
+<p>그리고 타입 추론이 끝나면 컴파일러는 타입 추론을 진행하면서 수집한 에러를 actionable한 에러 메시지(자동으로 코드를 수정할 수 있는)나 에러를 발생시킨 실제 타입에 대한 메시지와 함께 개발자에게 알린다.</p>
+<p><img src="/2020/08/23/Embrace-Swift-type-inference/14.png" alt="img"></p>
+<p>이렇게 통합된 에러 추적 시스템은 Xcode11.4의 스위프트 5.2에선 많은 오류 메시지에 도입되었고, Xcode12의 스위프트 5.3에선 모든 에러 메시지에 적용되었다. Embrace Swift type inference</p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2020-07-19T10:36:32.000Z" title="2020-07-19T10:36:32.000Z">2020-07-19</time><span class="level-item"><a class="link-muted" href="/categories/WWDC/">WWDC</a><span> / </span><a class="link-muted" href="/categories/WWDC/SwiftUI/">SwiftUI</a></span><span class="level-item">11 minutes read (About 1601 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2020/07/19/App-essentials-in-SwiftUI/">App essentials in SwiftUI</a></h1><div class="content"><blockquote>
+<p> WWDC 2020을 통해 SwiftUI에선 <code>App</code>과 <code>Scene</code> 개념이 추가됐다. 이를 소개하고 있는 <a href="https://developer.apple.com/videos/play/wwdc2020/10040/">App essentials in SwiftUI</a> 세션을 보고 간단히 정리해보았다. </p>
+</blockquote>
+<p>새롭게 등장한 <code>App</code>, <code>Scene</code> 개념으로 UIKit 없이 순수 SwiftUI로만 앱을 만들 수 있게 됐다. </p>
+<h2 id="Views-scenes-and-apps"><a href="#Views-scenes-and-apps" class="headerlink" title="Views, scenes and apps"></a>Views, scenes and apps</h2><p><img src="/2020/07/19/App-essentials-in-SwiftUI/1.png" alt=""></p>
+<p>화면에 보이는 모든 뷰가 하나의 앱에 속하는 것이 아니기 때문에, 하나의 앱이 전체 화면에 대해 완벽히 제어할 수 없다. 나누어진 영역에서 앱이 보여지는 방법은 플랫폼이 제어한다. SwiftUI에선 이렇게 화면 안에 구분된 영역을 <code>Scene</code>이라 부른다. </p>
+<p>윈도우는 화면에 보여지는 <code>Scene</code>의 컨텐츠를 보여주는 가장 흔한 방법이다. iPadOS와 같은 플랫폼은 다수의 윈도우를 나란히 보여줄 수 있다. iOS나 watchOS 그리고 tvOS는 각각의 앱에 대해서 하나의 꽉 찬 단일 윈도우를 선호한다. macOS는 <code>Scene</code>의 컨텐츠가 얼마나 다양한 방법으로 보여질 수 있는가를 나타내는 좋은 예다. </p>
+<p>macOS에선 아래와 같이 다수의 윈도우로 개별 <code>Scene</code>을 보여주거나 탭으로 여러 <code>Scene</code>을 묶어 보여줄 수 있다. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/2.png" alt=""><br><img src="/2020/07/19/App-essentials-in-SwiftUI/3.png" alt=""></p>
+<p>이렇게 다수의 <code>Scene</code>은 <code>App</code>을 구성하고 <code>App</code>, <code>Scene</code> 그리고 <code>View</code>는 하나의 계층 구조를 이룬다. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/4.png" alt=""></p>
+<p>아래의 앱과 코드를 살펴보자. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/5.png" alt=""></p>
+<p><code>ReadingListViewer</code>는 <code>View</code>로 <code>Scene</code>의 한 종류인 <code>WindowGroup</code>에 속한다. 그리고 <code>WindowGroup</code>은 <code>App</code> 프로토콜을 따르는 <code>BookClubApp</code>의 <code>Scene</code>으로 사용된다. 코드에서 확인할 수 있는 계층구조와 우리가 위에서 살펴본 계층구조가 일치하는 것을 확인할 수 있다. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/6.png" alt=""></p>
+<p>그리고 <code>BookClubApp</code>과 <code>ReadingListViewer</code>가 선언된 코드 구조도 유사한 것을 확인할 수 있다. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/7.png" alt=""></p>
+<ul>
+<li><code>App</code>과 <code>View</code>, 둘 모두 Data Dependency를 선언할 수 있다. <ul>
+<li><code>BoolClubApp</code> - <code>@StateObject</code><ul>
+<li><code>@StateObject</code>는 이번에 새로 등장한 개념으로 이는 추후에 살펴보도록 하자</li>
+</ul>
+</li>
+<li><code>ReadingListViewer</code> - <code>@ObservedObject</code></li>
+</ul>
+</li>
+<li><code>App</code>과 <code>View</code>, 둘 모두 <code>body</code> 프로퍼티를 통해 사용자 인터페이스를 표시한다. <ul>
+<li><code>BookClubApp</code> - <code>var body: some Scene</code></li>
+<li><code>ReadingListViewer</code> - <code>var body: some View</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>세션의 주제와 별개로 Swift 5.3부터 등장한 <code>@main</code>이 선언되어 있는 것을 확인할 수 있다. 이는 프로그램의 시작점을 의미한다. 기본적으로 스위프트 프로그램은 <code>main.swift</code>를 필요로 하는데 <code>@main</code>을 통해 <code>App</code> 프로토콜을 따르고 있는 구조체에 해당 책임을 위임할 수 있다. </p>
+</blockquote>
+<h2 id="Understanding-Scenes"><a href="#Understanding-Scenes" class="headerlink" title="Understanding Scenes"></a>Understanding Scenes</h2><h3 id="WindowGroup"><a href="#WindowGroup" class="headerlink" title="WindowGroup"></a>WindowGroup</h3><p><code>WindowGroup</code>을 통해 다수의 윈도우를 독립적으로 관리할 수 있다. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/8.png" alt=""></p>
+<p>그리고 이렇게 독립된 윈도우는 서로 독립된 상태를 갖는데 이것이 SwiftUI에서 <code>Scene</code>의 가장 중요한 특징이라고 할 수 있다. </p>
+<p>각각의 독립된 윈도우는 서로의 상태에 영향을 주지 않는다. <code>App</code>은 각 <code>Scene</code>이 사용할 수 있는 Shared Model을 제공할 수 있지만, 각 <code>Scene</code>의 뷰들의 상태는 서로 독립적이다. </p>
+<p>그리고 위와 같이 앱 스위처에서 보여지는 타이틀을 뷰 변경자를 통해 윈도우별로 다르게 지정할 수 있다. 이는 부모 <code>Scene</code>의 상태에 영향을 줄 수 있는 변경자 중 하나이다. </p>
+<p>macOS에선 <code>WindowGroup</code>을 사용해 아래의 기능들을 제공할 수 있다.</p>
+<ul>
+<li>다중 윈도우</li>
+<li>파일 메뉴에 새 윈도우 생성 메뉴 아이템 추가<ul>
+<li>단축키 지원 (<code>Command + N</code>)</li>
+</ul>
+</li>
+<li>윈도우 메뉴<ul>
+<li>개별 윈도우를 위한 메뉴 아이템(윈도우 타이틀)</li>
+<li>다수의 윈도우를 하나의 탭 인터페이스로 통합하는 기능을 지원하는 메뉴 아이템</li>
+</ul>
+</li>
+</ul>
+<p>이 모든 것들은 부가적인 코드 없이 SwiftUI가 자동으로 지원하는 기능들이다. </p>
+<p><code>Scene</code>의 생명주기는 실행되고 있는 플랫폼에 의해 관리된다. macOS에선 새 윈도우가 필요하면 <code>WindowGroup</code>은 새 자식 <code>Scene</code>을 생성한다. 이처럼 macOS나 iPadOS와 같이 다중 윈도우를 지원하는 플랫폼에선 <code>WindowGroup</code>은 다수의 자식 <code>Scene</code>을 생성할 수 있다. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/9.png" alt=""></p>
+<p>각각의 윈도우는 사용자 인터페이스 정의를 공유하지만 모두 독립된 상태를 갖는다. 그렇기 때문에 하나의 윈도우에서의 변화는 다른 윈도우에 영향을 주지 않는다.</p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/10.png" alt=""></p>
+<p>플랫폼이 <code>Scene</code> 생명주기 관리에 책임이 있기 때문에, 각 뷰의 상태를 관리할 수 있는 새 프로퍼티 래퍼인 <code>@SceneStorage</code>라는 개념이 새로 등장했다.</p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/11.png" alt=""></p>
+<p>이는 고유 키 값을 이용해 저장될 상태를 식별한다. 그리고 상태는 SwiftUI에 의해 적절한 타이밍에 저장되고 복원된다. </p>
+<h2 id="Customizing-Apps"><a href="#Customizing-Apps" class="headerlink" title="Customizing Apps"></a>Customizing Apps</h2><h3 id="Document-based-App"><a href="#Document-based-App" class="headerlink" title="Document based App"></a>Document based App</h3><p>지금까지 살펴본 <code>BookClubApp</code>은 Data-Driven 앱으로 Shared Model을 기반으로 하는 형태의 앱이었다. </p>
+<p>이런 형태의 앱뿐만 아니라, 문서 기반의 앱도 존재한다. 이런 형태의 앱에선 <code>DocumentGroup</code>을 사용할 수 있다. </p>
+<p><code>DocumentGroup</code>은 열기, 편집, 저장과 같이 문서 기반의 앱을 관리하는데 필요한 기능을 제공하는 <code>Scene</code>의 한 종류다.</p>
+<h3 id="Preferences-Window"><a href="#Preferences-Window" class="headerlink" title="Preferences Window"></a>Preferences Window</h3><p>설정 윈도우(<em>Preferences Window</em>)는 macOS 앱들이 제공하는 공통적인 기능 중 하나이다. </p>
+<p>이를 위해 macOS에는 새로운 <code>Scene</code> 타입인  <code>Settings</code> 타입이 추가되었다. 이는 기본적인 설정 윈도우와 관련 단축키도 제공한다.</p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/12.png" alt=""></p>
+<p>그리고 우린 기본 단축키 이외의 단축키도 새 변경자 API를 통해 지원할 수 있다. </p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/13.png" alt=""></p>
+<p><img src="/2020/07/19/App-essentials-in-SwiftUI/14.png" alt=""></p>
+<hr>
+<p>해당 세션을 통해 앱과 관련하여 새로 추가된 기능 및 API들에 대해 간단히 알아볼 수 있었다. 길지 않은 세션이기 때문에 출,퇴근길에 간단하게 시청할 수 있는 세션이었다. </p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2019-12-26T12:10:52.000Z" title="2019-12-26T12:10:52.000Z">2019-12-26</time><span class="level-item"><a class="link-muted" href="/categories/WWDC/">WWDC</a><span> / </span><a class="link-muted" href="/categories/WWDC/SwiftUI/">SwiftUI</a></span><span class="level-item">19 minutes read (About 2789 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/26/SwiftUI-Essentials-2/">SwiftUI Essentials (2)</a></h1><div class="content"><h2 id="Building-custom-views"><a href="#Building-custom-views" class="headerlink" title="Building custom views"></a>Building custom views</h2><p>SwiftUI로 커스텀 뷰를 만드는 방식에 대해 이야기 해보자. </p>
+<p>주문 내역을 보여주는 <code>OrderHistory</code>를 살펴보자.</p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/1.png" alt=""></p>
+<p>위의 코드에서 먼저 살펴볼 부분은 바로 <code>View</code> 프로토콜을 따르고 있는 <code>OrderHistory</code>가 구조체로 선언되어 있다는 점이다.</p>
+<p>일반적으로 UIKit으로 뷰를 만들면 프로토콜을 따르는 구조체가 아닌 공통 부모 클래스로부터 상속받는 클래스를 작성하곤 한다. <code>OrderHistory</code>를 UIKit으로 만든다면 다음과 같은 상속 관계를 가질 것이다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/2.png" alt=""></p>
+<p><code>UIView</code>는 <code>alpha</code>나 <code>backgroundColor</code> 같은 공통된 저장 프로퍼티(stored property)를 갖고 있다. <code>OrderHistory</code>는 자신의 <code>previousOrders</code> 프로퍼티와 더불어 부모 클래스의 프로퍼티까지 갖고 있게 된다. 반면에 SwiftUI는 어떨까? </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/3.png" alt=""></p>
+<p>SwiftUI는 이런 공통된 저장 프로퍼티를 분리된 변경자로 관리하고 각각의 변경자는 자신들만의 뷰를 생성하게 된다. 그러므로 공통된 저장 프로퍼티는 뷰 계층 전반에 걸쳐 분산된다. 이러한 방식으로 뷰를 더 가볍게 해서 각 뷰의 고유 목적에 맞게 최적화한다.</p>
+<p>이러한 방식 때문에 SwiftUI에서 뷰가 프로토콜이 된다고 할 수 있는 것이다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/4.png" alt=""></p>
+<p>그럼 뷰는 무엇을 하는 것일까?</p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/5.png" alt=""></p>
+<p>뷰는 단지 UI의 한 조각을 정의할 뿐이고 우린 이런 뷰들을 이용하고 재사용하여 뷰 계층을 구성하는 것이다. <code>View</code> 프로토콜의 살펴보자. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/6.png" alt=""></p>
+<p>위의 코드를 보고 있으면 어떤 생각이 드는가? 재귀적이지 않은가? </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/7.png" alt=""></p>
+<p>하나의 뷰가 있고 그 뷰의 <code>body</code>가 다른 뷰를 나타내고 그 뷰의 <code>body</code>가 또 다른 뷰를 나타내는 이런 구조를 보일 수 있다고 생각할 수 있는데 이는 지속되지 않는다. 그 이유는 SwiftUI가 스스로 컨텐츠를 갖지 않고 다른 뷰를 구성하는 아토믹(atomic)한 뷰인 원시 뷰(primitive view)를 제공하고 위와 같은 <code>body</code> 사슬의 끝은 결국 이런 원시 뷰이기 때문이다.</p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/8.png" alt=""></p>
+<p>우리가 위에서 보았던 <code>Text</code>나 <code>Image</code>와 더불어 드로잉에 사용되는 <code>Color</code>와 <code>Shape</code>, 레이아웃에 사용되는 <code>Spacer</code>와 같은 다양한 원시 뷰를 제공한다. </p>
+<p>다시 <code>OrderHistory</code>로 돌아와 클래스가 아닌 구조체로 정의된 것에 주목해보자. 클래스로 정의한 것이 아니기 때문에 <code>OrderHistory</code>는 더 이상 이벤트 기반으로 동작하는 명령형 코드로 갱신되는 영구적인 객체가 아니다.</p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/9.png" alt=""></p>
+<p>대신 뷰는 Input에 따라 결과가 달라지는 함수와 같이 선언형 코드로 정의된다. 이 말은 Input이 변경되면 SwiftUI가 <code>body</code> 프로퍼티를 다시 호출해서 뷰를 갱신한다.</p>
+<p>만일 이벤트 기반의 명령형 코드였다면 Input의 변경(삭제, 삽입 등)에 따른 갱신 코드를 작성해주어야 했는데, SwiftUI에서는 선언형 코드로 인풋이 변경되면 SwiftUI가 내부적으로 이전 데이터와 새 데이터를 비교해서 무엇이 변경되었는지를 비교 후 효율적으로 뷰를 갱신하게 된다.</p>
+<p><code>OrderHistory</code> 코드를 계속해서 살펴보자. 조건에 따라 뷰의 유무를 표시할 때 우리는 다음과 같이 뷰 빌더 클로저 안에 조건문을 통해 이를 구현할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/10.png" alt=""></p>
+<p>하지만 이런 조건문도 상황에 따라 제대로 사용해야 한다. 다음 상황의 코드를 살펴보자. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/11.png" alt=""></p>
+<p><code>flipped</code> 값에 따라 아이콘의 각도를 다르게 보여주고 싶을 때 위와 같이 작성할 수 있다. 하지만 이는 잘못된 방법이다. 이런 코드는 부자연스러운 애니메이션을 만들게 된다. 이 코드는 SwiftUI에게 서로 다른 뷰 중 하나를 선택하게 하는 것이고 이는 곧 뷰의 추가와 삭제를 의미한다. 뷰의 추가와 삭제는 fade 애니메이션이 적용되기에 부자연스러운 애니메이션을 보게 되는 것이다. </p>
+<p>우리가 원하는 자연스러운 애니메이션을 위해선 다음과 같이 코드를 작성해야 한다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/12.png" alt=""></p>
+<p>여기서 얻을 수 있는 교훈은 이런 조건에 따라 다른 값에 의한 뷰의 변화를 부드러운 애니메이션을 통해 제공하기 위해선 최대한 이를 변경자 내부에 위치시켜 SwiftUI가 변화를 감지하여 보다 부드러운 애니메이션을 제공하도록 해야 한다는 것이다.</p>
+<p>또한 비대해진 <code>OrderHistory</code>를 우린 더 작은 뷰로 나누어 관리할 수도 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/13.png" alt=""></p>
+<p>만일 <code>OrderHistory</code>에 조건에 따라 또 다른 뷰가 추가되어야 한다면 코드를 어떻게 작성해야할까</p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/14.png" alt=""></p>
+<p>위와 같은 방법은 확장성이 매우 떨어진다. 우리는 이런 상황에서 <code>ForEach</code> 뷰를 사용할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/15.png" alt=""></p>
+<p><code>ForEach</code>는 하나의 뷰로 <code>List</code>와 마찬가지로 콜렉션 데이터 타입을 인자로 받는다. 그리고 뷰 빌더 클로저 안에 뷰를 나열하는데 이때 나열된 뷰는 <code>ForEach</code>에 추가되지 않고 <code>ForEach</code>의 상위 뷰에 추가된다.</p>
+<p>지금까지 작성된 코드들을 보면 우리가 직접 작성하지 않고도 SwiftUI가 스스로 그리고 반응하며 갱신하는 것을 확인할 수 있었다. 이것이 바로 선언형 코드의 장점이라 할 수 있다.</p>
+<h2 id="Composing-Controls"><a href="#Composing-Controls" class="headerlink" title="Composing Controls"></a>Composing Controls</h2><p>아보카도 토스트 주문을 넣는 화면을 다시 살펴보자. 이는 우리가 알고 있는 화면과 많이 다르다. 정확히 말하자면 정형화되지 않은 상태다. 이 뷰를 아래와 같이 우리가 익숙한 형태의 뷰로 변경해보자. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/16.png" alt=""></p>
+<p>둘의 가장 큰 차이점은 컨테이너가 다르다는 것이다. </p>
+<p>기존 뷰(왼쪽)의 컨테이너가 <code>VStack</code>이라면 우리가 익숙한 오른쪽 뷰의 컨테이너는 <code>Form</code>이다. <code>Form</code> 역시 뷰 컨테이너의 한 종류다. <code>VStack</code>과의 차이점에는 헤더, 섹션 등이 있어 보다 정형화된 그룹 스타일의 UI를 보다 쉽게 만들 수 있다.</p>
+<p>그리고 이렇게 컨테이너가 바뀜에 따라 그 안에 속하는 컨트롤(버튼, 토글 등)도 그 모습이나 속성이 컨테이너에 따라 변한다. 또한 <code>Form</code>을 사용하면 서로 다른 플랫폼에서 다양한 룩앤필(Look and Feel)을 제공할 수 있다. 이렇게 SwiftUI가 UI를 그리기 때문에 우리는 기능에 보다 집중할 수 있다.</p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/17.png" alt=""></p>
+<p>위의 화면에서 <code>Button</code>을 예로 들면 뷰 컨테이너가 바뀌면서 <code>Button</code>의 <code>padding</code>, <code>alignment</code> 등이 바뀐 것을 확인할 수 있다. </p>
+<p>이번엔 <code>Button</code> 코드를 살펴보자. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/18.png" alt=""></p>
+<p>위의 단일 코드로 여러 플랫폼에서 다양한 룩앤필을 제공할 수 있다. </p>
+<p><code>Button</code>은 눌렸을 때 액션을 인자로 넣어주고 버튼의 상태와 목적을 나타내는 <code>label</code>을 뷰 빌더 클로저를 통해 제공해줄 수 있다. 그리고 앞에서 봐왔듯이 여러 변경자들을 통해 보다 쉽게 커스터마이징을 할 수 있다. 이를 통해 우리는 다양한 플랫폼의 다양한 버튼을 사용자에게 제공해줄 수 있다.</p>
+<p>그렇기 때문에 SwiftUI에서 컨트롤은 적응형(adaptive) 컨트롤이라 할 수 있다. 적응형 컨트롤은 다음과 같은 특성을 갖는다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/19.png" alt=""></p>
+<p>컨트롤은 그 자체로 모양이 아닌 역할을 나타낸다. 이렇게 컨트롤이 역할을 의미하기 때문에 여러 플랫폼에 거쳐 재사용될 수 있는 것이다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/20.png" alt=""></p>
+<p>이렇게 컨트롤들은 역할이 있고 이런 역할은 목적에 의해 생겨나기 때문에 <code>Toggle</code>이나 <code>Button</code>들은 그들 각자의 목적이 존재한다. 그리고 이들은 사람이 읽을 수 있는 레이블을 포함하기 때문에 기본적으로 VoiceOver 기능을 지원한다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/21.png" alt=""></p>
+<p>그리고 레이블이 <code>Text</code>가 아니라 <code>Image</code>어도 <code>Image</code>에 설명을 위한 <code>Text</code>를 함께 제공하여 VoiceOver 기능을 제공할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/22.png" alt=""></p>
+<p>또한 커스텀 뷰는 <code>accessbility</code> 변경자를 통해 이런 기능을 제공할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/23.png" alt=""></p>
+<p>이렇게 컨트롤은 플랫폼에 따라 모양은 다를 수 있지만 본연의 목적을 수행하는 데 이는 SwiftUI의 핵심이라고 할 수 있다. SwiftUI는 한 번만 작성하고 어디에서나 실행할 수 있는 수단 일뿐만 아니라 이러한 핵심 개념을 배우고 다양한 컨텍스트와 플랫폼에서 사용할 수 있는 프레임 워크다.</p>
+<p>그리고 우리가 뷰에서처럼 컨트롤에서도 변경자를 사용할 수 있다. 그리고 이는 뷰에서와 동일한 특성을 갖는다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/24.png" alt=""></p>
+<p>예를 들어 다음과 같이 컨트롤 계층 전반에 걸쳐 변경자를 공유할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/25.png" alt=""></p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/26.png" alt=""></p>
+<p>다음으로 살펴볼 것은 환경(Environment)이다. 이는 일종의 모든 뷰에서 접근할 수 있는 특성의 집합으로 볼 수 있다. 그리고 자식 뷰는 부모 뷰의 환경 특성을 상속 받는다. 물론 필요에 따라 자식 뷰에서 이를 오버라이딩할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/27.png" alt=""></p>
+<p>그리고 이 환경은 프리뷰에서 유용하게 사용되는데, 동일한 UI를 여러 문맥에 따라 다르게 보여주는 기능을 제공한다. 이를 통해 환경, 문맥에 따라 UI가 어떻게 바뀌는지 쉽게 확인할 수 있다. </p>
+<h2 id="Navigating-your-app"><a href="#Navigating-your-app" class="headerlink" title="Navigating your app"></a>Navigating your app</h2><p>iOS에선 기본적으로 <code>NavigationView</code>를 통해 기본 내비게이션 스타일을 사용할 수 있으며 <code>navigationBarTitle</code> 변경자를 통해 타이틀을 지정할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/28.png" alt=""></p>
+<p><code>navigationBarTitle</code>은 다른 변경자와 같이 아래를 향하지 않고 위를 향하는 특성을 갖는다. <code>OrderForm</code>에 변경자를 적용했지만, <code>NavigationView</code>에 반영된다는 것을 의미한다. </p>
+<p>그리고 <code>NavigationButton</code>를 목적지와 함께 만들어 실질적인 화면 전환을 구현할 수 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/30.png" alt=""></p>
+<p><code>TabbedView</code>를 통해 성격이 다른 두 뷰를 탭 뷰로 묶어 관리할 수도 있다. </p>
+<p><img src="/2019/12/26/SwiftUI-Essentials-2/31.png" alt=""></p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2019-12-21T12:55:57.000Z" title="2019-12-21T12:55:57.000Z">2019-12-21</time><span class="level-item"><a class="link-muted" href="/categories/WWDC/">WWDC</a><span> / </span><a class="link-muted" href="/categories/WWDC/SwiftUI/">SwiftUI</a></span><span class="level-item">17 minutes read (About 2490 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/12/21/SwiftUI-Essentials-1/">SwiftUI Essentials (1)</a></h1><div class="content"><h2 id="Views-and-modifiers"><a href="#Views-and-modifiers" class="headerlink" title="Views and modifiers"></a>Views and modifiers</h2><p><code>View</code>들은 UI를 구성하는 가장 기본적인 블록이다. UIKit의 <code>UIView</code>나 AppKit의 <code>NSView</code>와 같이 UI를 구성하는 기본적인 단위라고 할 수 있다. </p>
+<p>다음 앱의 UI를 계층 구조로 살펴보자. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ViewHierarchy.png" alt=""></p>
+<p>이 계층을 SwiftUI로 작성하면 다음과 같다.</p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/CodeHierarchy.png" alt=""></p>
+<p>SwiftUI는 이러한 뷰의 계층을 코드로 표현한다. 왼쪽의 코드 구조는 오른쪽의 뷰 계층 구조와 상당히 흡사한 것을 확인할 수 있다. </p>
+<p>또한 코드에서 살펴볼 수 있듯이 뷰 계층을 표현하는데 <code>addSubview</code>와 같은 메소드를 사용하지 않는다. SwiftUI는 하나의 계층 구조를 각 뷰 조각들로 구성하는 것이 아니라 계층 전체를 하나의 완전한 구조로 생성한다. 왜냐하면 <strong>SwiftUI는 뷰를</strong> 명령형(imperatively)과 반대인 <strong>선언형(declaratively)으로 정의</strong>하고 있기 때문이다. </p>
+<p>명령형과 선언형의 차이점을 살펴보자. </p>
+<ul>
+<li>명령형 코드 : 명시적인 명령(explicit commands)을 통해 결과를 구성</li>
+<li>선언형 코드 : 묘사(describing) 통해 결과를 구성. 단 이를 어떻게 생성할지는 다른 주체에 의해 결정</li>
+</ul>
+<p>둘의 차이가 정의로만은 부족할 수 있다. 상황을 예를 들어 둘의 차이를 살펴보자. </p>
+<p>명령형 코드는 친구에게 아보카도 토스트를 만드는 방법을 알려주는 것과 같다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ImperativeToast1.png" alt=""></p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ImperativeToast2.png" alt=""></p>
+<p>선언형 코드는 아보카도 토스트를 만드는 요리사에게 토스트 주문을 하는 것과 같다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/DeclarativeToast.png" alt=""></p>
+<p>친구에게 토스트 만드는 방법을 설명할 때는 <code>7. 아보카도의 중심을 제거해라.</code>와 같이 내가 직접 단계별로 필요한 결과를 전달한다. </p>
+<p>반면, 요리사에게는 내가 원하는 토스트의 모습을 묘사하여 전달하고 그것을 어떻게 만드는지는 전적으로 요리사의 몫이다. 그리고 요리사가 전문가라면 우리는 항상 최상의 품질을 보장받을 수 있다.</p>
+<blockquote>
+<p>이 두 상황을 통해 명령형 코드와 선언형 코드의 차이점을 보다 쉽게 이해할 수 있었다.</p>
+</blockquote>
+<p>SwiftUI가 요리사의 역할을 하는 것이다. 그럼 이제 SwiftUI의 요소들을 하나씩 살펴보자. </p>
+<h3 id="View-Container-Syntax"><a href="#View-Container-Syntax" class="headerlink" title="View Container Syntax"></a>View Container Syntax</h3><p>뷰 컨테이너는 여러 다른 컨텐트 뷰(Content View)들로 구성되어 있다. 뷰 컨테이너에는 <code>VStack</code>, <code>HStack</code> 등이 존재한다. 뷰 컨테이너의 일반적인 문법은 다음과 같다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ViewContainerSyntax.png" alt=""></p>
+<p><code>VStack</code>을 다음과 같이 사용할 수 있는 것과 같다. </p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">VStack</span> &#123; </span><br><span class="line">  <span class="type">Imgae</span>(...)</span><br><span class="line">  <span class="type">Text</span>(...)</span><br><span class="line">  <span class="type">Text</span>(...)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Image</code>, <code>Text</code>와 같은 컨텐트 뷰들은 뷰 빌더(View Builder)라는 클로저 안에 나열된다. 그리고 뷰 컨테이너의 생성자는 이 뷰 빌더 클로저를 인자로 받는다. <code>addSubview</code>와 같은 함수를 호출하는 대신 이 클로저 블록 안에 원하는 뷰를 순서대로 나열만 해주면 된다.</p>
+<p>실제로 뷰 빌더가 내부적으로 어떻게 동작하는지 확인하기 위해 <code>VStack</code> API를 살펴보자. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ViewContainerSyntaxDetail.png" alt=""></p>
+<p>생성자 인자 중 <code>content</code>에 <code>@ViewBuilder</code> 속성(attribute)이 붙어있는 것을 확인할 수 있다. 스위프트 컴파일러는 <code>@ViewBuilder</code> 속성이 붙어 있으면 해당 클로저를 우리가 나열한 컨텐트 뷰들이 포함된 단일 뷰를 반환하는 클로저로 변환한다. </p>
+<p>이런 특수한 클로저를 뷰 컨테이너의 생성자에 전달해줌으로써 뷰 컨테이너와 컨텐트 뷰들은 들여 쓰기로 자연스레 구분될 수 있다. </p>
+<p>또한 <code>VStack</code>은 <code>alignment</code>나 <code>spacing</code>과 같은 인자를 추가로 받아 정렬이나 간격을 조정해줄 수 있다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ExampleAppCode.png" alt=""></p>
+<p>SwiftUI에서 <code>VStack</code>, <code>HStack</code>과 같이 컨트롤(Control)도 뷰 컨테이너의 종류로 다른 뷰를 컨텐트 뷰로 포함할 수 있다. <code>Control</code>에는 <code>Button</code>, <code>Toggle</code> <code>Slider</code> 등이 있다. 위의 코드에서처럼 <code>Text</code>뿐만 아니라 다른 뷰도 컨텐트 뷰로 포함할 수 있다.</p>
+<blockquote>
+<p>컨트롤은 사용자와 상호작용할 수 있는 요소들을 말한다. <a href="https://developer.apple.com/documentation/swiftui/views_and_controls">공식 문서</a>를 통해 컨트롤에 어떤 것들이 있는지 알 수 있다. </p>
+</blockquote>
+<p>컨트롤과 뷰 컨테이너는 추후에 더 자세히 살펴보도록 하고 이젠 <strong><code>$</code></strong> 싸인에 주목해보자. </p>
+<h3 id="Binding-Syntax"><a href="#Binding-Syntax" class="headerlink" title="Binding Syntax"></a>Binding Syntax</h3><p><code>Stepper</code>를 선언하는 코드를 살펴보자. <code>order.quantity</code>를 넘기는데 <code>$</code> 싸인이 앞에 붙었다. 이는 단순히. <code>order.quantity</code> <strong>값</strong>을 넘기는 것이 아닌 <strong>바인딩</strong>을 넘기는 것이다. 그럼 여기서 말하는 바인딩이란 뭘까?</p>
+<p>영상의 예제 앱에서 <code>Stepper</code>는 <code>OrderForm</code>이란 뷰에 포함되어 있다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/BindingSyntax.png" alt=""></p>
+<p><code>OrderForm</code>은 현재 순서를 추적하기 위해 <code>Order</code> 타입에 의존하고 있다. 이 프로퍼티를 살펴보면 <code>@State</code>란 속성이 붙어있는 것을 확인할 수 있다. <code>@State</code> 속성이 붙어있으면 SwiftUI는 이를 보고 내부적으로 지속성 있는 상태(persistent state)를 생성하고 관리하며 상태의 값을 이 프로퍼티를 통해 접근하도록 한다.</p>
+<p>우린 이 프로터티에 접근해 상태의 값을 읽거나 쓸 수 있다.</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Text</span>(<span class="string">"Quantity: \(order.quantity)"</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>Stepper</code>는 정적인 뷰가 아닌 컨트롤이다. 그 말은 사용자가 <code>Stepper</code>의 버튼을 누르면 그 상태가 변경될 수 있다는 의미다. 이를 위해선 단순히 읽기 전용인 값을 전달하는 것이 아니라 바인딩을 전달해야 한다. </p>
+<p>바인딩은 일종의 관리되는 참조(managed reference)로 이를 통해 하나의 뷰가 다른 뷰의 상태를 변경할 수 있다. 이 예제에선 <code>Stepper</code>가 <code>OrderForm</code>의 상태를 <code>$order.quantity</code>를 통해 변경하고 있는 것이다. </p>
+<blockquote>
+<p>SwiftUI에서의 데이터 흐름에 대한 자세한 내용은 <a href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=2ahUKEwjF6tvttsbmAhVRJaYKHXDyBggQwqsBMAB6BAgKEAQ&url=https%3A%2F%2Fdeveloper.apple.com%2Fvideos%2Fplay%2Fwwdc2019%2F226%2F&usg=AOvVaw0HLHjam6QvNklY9QlJyvIA">Data Flow Through SwiftUI</a> 영상을 참고하자. </p>
+</blockquote>
+<p>다시 예제 앱으로 돌아와 우리가 아직 살펴보지 못한 문법을 살펴보자. </p>
+<h3 id="Modifier"><a href="#Modifier" class="headerlink" title="Modifier"></a>Modifier</h3><p><img src="/2019/12/21/SwiftUI-Essentials-1/ModifierText.png" alt=""></p>
+<p><code>Text(&quot;Avocado Toast&quot;)</code>에서 우린 <code>font(.title)</code>과 같은 메소드를 호출할 수 있다. 이 메소드가 하는 작업은 간단하다. 호출한 뷰로부터 새 뷰를 만들어내는 것이다. SwiftUI에서 이런 메소드를 변경자(Modifier)라 부른다. </p>
+<p>이런 변경자에 의해 뷰 계층이 어떻게 변경되는지 살펴보자.  <code>Text(&quot;Avocado Toast&quot;)</code>을 포함하는 <code>VStack</code>은 다음과 같은 계층 구조를 가진다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/NoModifierViewHierarchy.png" alt=""></p>
+<p>하지만 여기에 <code>font(.title)</code> 변경자를 적용하면 뷰 계층은 다음과 같이 변경된다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ModifierViewHierarchy.png" alt=""></p>
+<p>이렇게 변경자로 생성된 뷰는 기존의 뷰를 감싸고 뷰 계층에 포함된다. 이런 변경자는 다수의 변경자들과 함께 체이닝될 수 있다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/MultipleModifierViewHierarchy.png" alt=""></p>
+<p>이렇게 변경자를 추가하게 되면 계층 구조는 빠른 속도로 비대해진다. 우리는 이전까지 이렇게 뷰 계층이 비대해지면 성능 이슈에 대해서 고민하곤 했다. 기존의 뷰 계층은 최대한 작고 가벼워야 했다.</p>
+<p>하지만 SwiftUI는 이러한 부분에 대한 걱정을 덜어도 된다. 위에서 언급했듯이 우리는 선언형 코드를 작성한다. 우리는 단지 원하는 모습을 묘사할 뿐이고, SwiftUI가 이를 최적화한다. 우리가 아무리 많은 변경자를 사용해 <code>Text</code>를 여러 뷰로 감싸도 SwiftUI가 이를 보다 효율적인 자료구조로 최적화한다. 그리고 이렇게 최적화된 자료구조는 렌더링 시스템이 렌더링 하는데 사용한다. </p>
+<p>이렇게 변경자 체이닝 문법은 성능 이슈에 대해 걱정할 필요 없이 많은 이점을 제공한다. 그중 하나로 변경자 체이닝은 시각적 요소의 직관적인 순서를 강제한다. 즉 체이닝에 참여하는 변경자의 순서에 따라 최종 렌더링 되는 모습이 달라진다는 것이다. </p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/PaddingLast.png" alt=""></p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/PaddingFirst.png" alt=""></p>
+<p>만약 이런 속성들을 변경자 체이닝으로 변경하는 것이 아닌 <code>Text</code>의 내부에 포함된 속성이라고 가정해보자. 우린 시행착오와 문서 없이는 각각의 속성들이 어떤 순서로 적용되는지 알 수 없을 것이다. 이런 속성들을 변경자를 통해 적용함으로써 우린 순서를 명시적으로 지정할 수 있다. </p>
+<p>또한 이런 변경자들은 여러 뷰들에서 공유될 수 있다.</p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ModifierWithoutSharing.png" alt=""></p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/ModifierWithSharing.png" alt=""></p>
+<p>이렇게 변경자를 공유함으로써 각각의 뷰들은 보다 단순해질 수 있고 자신들만의 인터페이스에 집중할 수 있다. 이것이 SwiftUI의 기본 원칙이다.</p>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/SwiftUIPrinciple.png" alt=""></p>
+<p>더 작고 단일 목적의 뷰라는 원칙을 따름으로써 우리는 보다 이해하기 쉽고, 유지 보수가 쉬운 뷰를 만들 수 있다. </p>
+<blockquote>
+<p>재사용성 역시 증가한다.</p>
+</blockquote>
+<p><img src="/2019/12/21/SwiftUI-Essentials-1/SwiftUIPrinciple2.png" alt=""></p>
+<p>그리고 이렇게 각자의 역할별로 작게 나누어진 뷰들을 통해 보다 큰 뷰를 효과적으로 구성할 수 있다. </p>
+</div></article></div><div class="card"><article class="card-content article" role="article"><div class="article-meta size-small is-uppercase level is-mobile"><div class="level-left"><time class="level-item" dateTime="2019-06-06T08:02:43.000Z" title="2019-06-06T08:02:43.000Z">2019-06-06</time><span class="level-item"><a class="link-muted" href="/categories/WWDC/">WWDC</a></span><span class="level-item">14 minutes read (About 2076 words)</span></div></div><h1 class="title is-3 is-size-4-mobile"><a class="link-muted" href="/2019/06/06/Specifying-the-Scenes-Your-App-Support/">Specifying the Scenes Your App Support</a></h1><div class="content"><p>WWDC19에서 iOS 13이 발표되고 새로운 것들이 다수 생겼다. 바인딩을 지원하는 <code>Combine</code>, 선언형 UI 방식으로 UI를 구현할 수 있는 <code>SwiftUI</code> 프레임워크까지 많은 것들이 나왔다. </p>
+<p>이와 함께 앱 생명주기와 관련된 새 공식 문서가 등장했는데 여기서 <code>Scene</code>이라는 개념이 등장한다. <a href="https://developer.apple.com/documentation/uikit/app_and_scenes/managing_your_app_s_life_cycle">Managing Your App’s Life Cycle</a> 문서를 살펴보기 전에 <a href="https://developer.apple.com/documentation/uikit/app_and_scenes/specifying_the_scenes_your_app_supports">Specifying the Scenes Your App Support</a> 문서를 먼저 살펴보며 Scene의 등장에 대한 이유를 이해하고자 한다. </p>
+<blockquote>
+<p>참고로 아직은 베타 문서라 추후에 내용이 변경되거나 사용되는 클래스, 프로토콜 그리고 메소드 등의 이름이 변경될 수 있다.</p>
+</blockquote>
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><hr>
+<p>iOS 13과 그 이상에서는 사용자가 앱 UI의 사본을 여러 개 만들어 앱 스위처 내에서 서로 전환할 수 있다. iPad에서 사용자는 또한 앱 UI의 사본과 사본을 나란히 디스플레이할 수 있다. 각각의 앱 UI 사본에 대해 Scene 객체를 사용하여 UI를 화면에 띄우는 윈도우, 뷰 그리고 뷰 컨트롤러를 관리한다. </p>
+<blockquote>
+<p>WWDC19 키노트에서는 이를 Multi-Window Capability라 설명하며 동일한 메모 앱 두 개를 나란히 실행시키는 모습을 보여주었다.</p>
+</blockquote>
+<p>사용자가 새 Scene을 요청할 때, UIKit은 이에 해당하는 Scene 객체를 만들고 이것의 초기화 설정을 다룬다. 이를 위해 UIKit은 당신이 제공한 정보에 의존한다. 앱은 반드시 자신이 지원하는 Scene의 유형과 해당 Scene을 관리하는데 사용하는 객체를 선언해야 한다. 이 작업은 앱의 <code>Info.plist</code>에 정적으로 정의하거나, 런타임에 동적으로 정의할 수 있다.</p>
+<blockquote>
+<p><strong>중요</strong></p>
+<p>Scene을 앱에서 지원하는 것은 선택이지만, 앱의 UI 사본들을 동시에 보여주고 싶다면 반드시 지원해야 한다. </p>
+</blockquote>
+<h3 id="Enable-Scene-Support-in-Your-Project-Settings"><a href="#Enable-Scene-Support-in-Your-Project-Settings" class="headerlink" title="Enable Scene Support in Your Project Settings"></a>Enable Scene Support in Your Project Settings</h3><hr>
+<p>앱은 앱의 구성 설정을 갱신하여 Scene을 명시적으로 선택해야 한다. </p>
+<ol>
+<li>Xcode 프로젝트를 연다.</li>
+<li><code>General Settings</code>로 이동한다.</li>
+<li><code>Deployment Info</code>  섹션에서 “Support multiple windows” 체크박스를 활성화한다. </li>
+</ol>
+<p>멀티플 윈도우 옵션을 활성화하면 Xcode는 앱의 <code>Info.plist</code> 파일에 <a href="https://developer.apple.com/documentation/bundleresources/information_property_list/uiapplicationscenemanifest">UIApplicationSceneManifest</a> 키를 추가한다. 이 키의 존재는 시스템에게 당신의 앱이 Scene을 지원한다는 사실을 전달한다. 이 키의 값은 딕셔너리로 초기에는 오직 <a href="https://developer.apple.com/documentation/bundleresources/information_property_list/uiapplicationscenemanifest/uiapplicationsupportsmultiplescenes"><code>UIApplicationSupportsMultipleScenes</code></a> 키만 포함하고 있는 상태다. </p>
+<p><code>UIApplicationSupportMultipleScenes</code> 키의 값은 당신의 앱이 실제로 동시에 여러 Scene을 지원하는지를 시스템에게 알린다. Xcode는 이 값을 기본적으로 <code>true</code>로 지정한다. 하지만 한 번에 하나의 Scene만 보여주고 싶으면 비활성화하면 된다. 멀티플 Scene을 지원하기 위해선 서로 다른 Scene들이 서로를 침범하지 않도록 방지하기 위한 추가 작업이 필요하다. 예를 들어 Scene에서 동일한 공유 데이터 구조를 사용하는 경우 앱 데이터 무결성을 유지하기 위해 해당 구조에 대한 접근을 조정해야 한다. </p>
+<h3 id="Configure-the-Details-for-Each-Scene"><a href="#Configure-the-Details-for-Each-Scene" class="headerlink" title="Configure the Details for Each Scene"></a>Configure the Details for Each Scene</h3><hr>
+<p>UIKit은 당신이 제공한 정보를 사용해 앱의 Scene 생성을 담당한다. 가장 간단한 방법은 이 정보를 앱의 <code>Info.plist</code>를 사용하는 것이다. </p>
+<ol>
+<li>Xcode를 열고 <code>Info.plist</code> 파일을 선택한다. </li>
+<li><code>Application Scene Manifest</code> 항목의 (+) 버튼을 누른다. 이 항목은 <code>UIApplicationSceneManifest</code> 키에 해당한다. 없는 경우 프로젝트 설정에서 위에서 언급한 대로 이를 추가하면 된다. </li>
+<li>메뉴가 등장하면 <code>Scene Configuration</code>을 선택한다. </li>
+<li><code>Scene Configuration</code> 항목에서 (+) 버튼을 클릭한다.</li>
+<li>당신의 앱에 메인 Scene을 추가하기 위해 <code>Application Session Role</code>을 선택한다. </li>
+<li>제공된 항목에 Scene의 상세 정보를 기입한다. </li>
+</ol>
+<p>대부분의 앱은 오직 하나의 메인 Scene만 필요하지만 멀티플 Scene을 추가하고 각각을 다르게 구성할 수 있다. 예를 들어 알림과 관련된 컨텐츠를 보여주기 위한 두 번째 Scene을 포함시킬 수 있다. UIKit은 각 Scene에 대해 다음 정보를 필요로 한다.</p>
+<ul>
+<li><a href="https://developer.apple.com/documentation/uikit/uiwindowscene"><code>UIWindowScene</code></a> 클래스의 이름</li>
+<li>당신의 앱이 Scene을 관리하는데 사용하는 사용자 정의 델리게이트 객체 클래스의 이름. 이 클래스는 반드시  <a href="https://developer.apple.com/documentation/uikit/uiwindowscenedelegate"><code>UIWindowSceneDelegate</code></a> 프로토콜을 따라야 한다. </li>
+<li>앱에서 Scene을 내부적으로 식별하는데 사용하는 고유한 이름</li>
+<li>Scene의 초기 UI를 포함하는 스토리보드의 이름. <code>.storyboard</code> 파일 확장자를 제외한 이름을 명시한다. </li>
+</ul>
+<p>Scene을 구성하는데 필요한 정보 추가적인 정보는 <a href="https://developer.apple.com/documentation/bundleresources/information_property_list/uiapplicationscenemanifest/uisceneconfigurations">UISceneConfigurations</a>를 참고하라.</p>
+<h3 id="Create-the-Interface-for-Your-Scene"><a href="#Create-the-Interface-for-Your-Scene" class="headerlink" title="Create the Interface for Your Scene"></a>Create the Interface for Your Scene</h3><hr>
+<p>스토리보드를 사용해 Scene의 UI를 지정한다.  <a href="https://developer.apple.com/documentation/bundleresources/information_property_list/uiapplicationscenemanifest/uisceneconfigurations/uiwindowscenesessionroleapplication/uiscenestoryboardfile"><code>UISceneStoryboardFile</code></a> 키에 지정한 스토리보드는 Scene을 보여주는데 사용되는 초기 뷰 컨트롤러를 포함한다. Scene 객체를 생성하는 것 외에도 UIKit은 Scene에 대한 윈도우를 생성하고 Scene의 스토리보드에서 초기 뷰 컨트롤러 지정한다. <a href="https://developer.apple.com/documentation/uikit/uiwindowscenedelegate"><code>UIWindowSceneDelegate</code></a> 객체의 메소드를 사용해서 코드로 이 뷰 컨트롤러를 교체할 수 있다. </p>
+<blockquote>
+<p><strong>중요</strong></p>
+<p>스토리보드의 초기 뷰 컨트롤러를 지정하는 것을 잊지 말아야 한다. UIKit는 UI를 구성할 때 이 뷰 컨트롤러의 존재에 의존한다. </p>
+</blockquote>
+<h3 id="Change-Your-Scene’s-Configuration-Dynamically"><a href="#Change-Your-Scene’s-Configuration-Dynamically" class="headerlink" title="Change Your Scene’s Configuration Dynamically"></a>Change Your Scene’s Configuration Dynamically</h3><hr>
+<p>실제로 Scene 객체를 생성하기 전에 UIKit은 앱 델리게이트의 메소드인 <a href="https://developer.apple.com/documentation/uikit/uiapplicationdelegate/3197905-application"><code>application(_:configurationForConnecting:options:)</code></a>를 호출하여 당신이 Scene과 연관된 상세 정보를 수정할 수 있도록 한다. 이 방법을 사용하여 UIKit에서 제공하는 옵션에 따라 Scene 구성을 조정할 수 있다. 예를 들어 시스템이 Scene에 알림 응답(Notification response)을 전달할 때 알림과 연관된 인터페이스와 함께 다른 스토리보드를 지정할 수 있다. </p>
+<p>동적으로 Scene 구성을 구현하지 않으면 UIKit은 Scene을 생성하는데 <code>Info.plist</code>의 정보를 사용한다. </p>
+<h3 id="Adopt-Scene-Based-Life-Cycle-Semantices"><a href="#Adopt-Scene-Based-Life-Cycle-Semantices" class="headerlink" title="Adopt Scene-Based Life-Cycle Semantices"></a>Adopt Scene-Based Life-Cycle Semantices</h3><hr>
+<p>Scene에 대한 지원을 추가하면 앱이 생명 주기 이벤트에 대응하는 방식이 변경된다. Scene을 사용하지 않는 앱에선 앱 델리게이트 객체가 포그라운드 혹은 백그라운드로의 전환을 담당한다. 앱에서 Scene을 지원하게 되면 UIKit은 이러한 책임을 당신이 지정한 Scene 델리게이트 객체에 위임한다. Scene 생명 주기는 다른 Scene에 독립적이고, 앱 자체와도 독립적이다. 그러므로 당신이 지정한 Scene 델리게이트 객체가 이러한 전환을 담당해야 한다. </p>
+<p>만일 앱이 iOS 12를 지원한다면 앱 델리게이트와 Scene 델리게이트 객체 모두에서 생명 주기 전환을 처리할 수 있다. UIKit은 오로지 하나의 델리게이트 객체에만 생명 주기 관련 이벤트 알림을 보낸다. iOS 13 이상에선 UIKit은 Scene 델리게이트 객체에 알림을 보내고, iOS 12 이하에선 UIKit은 앱 델리게이트에 해당 알림을 보낸다. </p>
+<p>생명 주기 이벤트를 어떻게 다루는지에 대한 추가적인 정보는 <a href="https://developer.apple.com/documentation/uikit/app_and_scenes/managing_your_app_s_life_cycle">Managing Your App’s Life Cycle</a>를 참고하라.</p>
+</div></article></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="Your name"></figure><p class="title is-size-4 is-block line-height-inherit">Your name</p><p class="is-size-6 is-block">Your title</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Your location</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">18</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">7</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">29</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Categories</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/categories/RxSwift/"><span class="level-start"><span class="level-item">RxSwift</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/Swift/"><span class="level-start"><span class="level-item">Swift</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/SwiftUI/"><span class="level-start"><span class="level-item">SwiftUI</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/WWDC/"><span class="level-start"><span class="level-item">WWDC</span></span><span class="level-end"><span class="level-item tag">5</span></span></a><ul class="mr-0"><li><a class="level is-mobile is-marginless" href="/categories/WWDC/Swift/"><span class="level-start"><span class="level-item">Swift</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/categories/WWDC/SwiftUI/"><span class="level-start"><span class="level-item">SwiftUI</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile is-marginless" href="/categories/iOS/"><span class="level-start"><span class="level-item">iOS</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><h3 class="menu-label">Recent</h3><article class="media"><div class="media-content size-small"><p><time dateTime="2020-09-19T14:50:24.000Z">2020-09-19</time></p><p class="title is-6"><a class="link-muted" href="/2020/09/19/Sample/">Sample</a></p><p class="is-uppercase"></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-08-23T07:22:27.000Z">2020-08-23</time></p><p class="title is-6"><a class="link-muted" href="/2020/08/23/Embrace-Swift-type-inference/">Embrace Swift type inference</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/WWDC/">WWDC</a> / <a class="link-muted" href="/categories/WWDC/Swift/">Swift</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-07-26T08:37:48.000Z">2020-07-26</time></p><p class="title is-6"><a class="link-muted" href="/2020/07/26/GeometryReader-in-SwiftUI/">GeometryReader in SwiftUI</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/SwiftUI/">SwiftUI</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-07-19T10:36:32.000Z">2020-07-19</time></p><p class="title is-6"><a class="link-muted" href="/2020/07/19/App-essentials-in-SwiftUI/">App essentials in SwiftUI</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/WWDC/">WWDC</a> / <a class="link-muted" href="/categories/WWDC/SwiftUI/">SwiftUI</a></p></div></article><article class="media"><div class="media-content size-small"><p><time dateTime="2020-02-15T08:26:52.000Z">2020-02-15</time></p><p class="title is-6"><a class="link-muted" href="/2020/02/15/SwiftUI-under-the-hood/">SwiftUI under the hood</a></p><p class="is-uppercase"><a class="link-muted" href="/categories/SwiftUI/">SwiftUI</a></p></div></article></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile is-marginless" href="/archives/2020/09/"><span class="level-start"><span class="level-item">September 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/08/"><span class="level-start"><span class="level-item">August 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/07/"><span class="level-start"><span class="level-item">July 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/02/"><span class="level-start"><span class="level-item">February 2020</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2020/01/"><span class="level-start"><span class="level-item">January 2020</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2019/12/"><span class="level-start"><span class="level-item">December 2019</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2019/11/"><span class="level-start"><span class="level-item">November 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2019/10/"><span class="level-start"><span class="level-item">October 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2019/07/"><span class="level-start"><span class="level-item">July 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2019/06/"><span class="level-start"><span class="level-item">June 2019</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2019/03/"><span class="level-start"><span class="level-item">March 2019</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li><li><a class="level is-mobile is-marginless" href="/archives/2018/11/"><span class="level-start"><span class="level-item">November 2018</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/Binding/"><span class="tag">@Binding</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/State/"><span class="tag">@State</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/ABI-Stability/"><span class="tag">ABI Stability</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/AnyView/"><span class="tag">AnyView</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/App/"><span class="tag">App</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/App-Thinning/"><span class="tag">App Thinning</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Bitcode/"><span class="tag">Bitcode</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Custom-URL-Scheme/"><span class="tag">Custom URL Scheme</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/GeometryReader/"><span class="tag">GeometryReader</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Group/"><span class="tag">Group</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Opaque-Type/"><span class="tag">Opaque Type</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/OptionSet/"><span class="tag">OptionSet</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/PreferenceKey/"><span class="tag">PreferenceKey</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Property-Wrappers/"><span class="tag">Property Wrappers</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/RxSwift/"><span class="tag">RxSwift</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Scene/"><span class="tag">Scene</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Swift/"><span class="tag">Swift</span><span class="tag is-grey-lightest">3</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Swift5/"><span class="tag">Swift5</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/SwiftUI/"><span class="tag">SwiftUI</span><span class="tag is-grey-lightest">3</span></a></div><div class="control"><a class="tags has-addons" href="/tags/Universal-Links/"><span class="tag">Universal Links</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/View/"><span class="tag">View</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/WWDC/"><span class="tag">WWDC</span><span class="tag is-grey-lightest">2</span></a></div><div class="control"><a class="tags has-addons" href="/tags/WWDC19/"><span class="tag">WWDC19</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/WindowGroup/"><span class="tag">WindowGroup</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/enum/"><span class="tag">enum</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/iOS/"><span class="tag">iOS</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/iOS-13/"><span class="tag">iOS 13</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/some/"><span class="tag">some</span><span class="tag is-grey-lightest">1</span></a></div><div class="control"><a class="tags has-addons" href="/tags/%EC%9D%B4%EC%A7%81/"><span class="tag">이직</span><span class="tag is-grey-lightest">1</span></a></div></div></div></div></div><div class="card widget"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe to Updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button is-primary" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="card widget"><div class="card-content"><div class="notification is-danger">You need to set <code>client_id</code> and <code>slot_id</code> to show this AD unit. Please set it in <code>_config.yml</code>.</div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Corn the blog" height="28"></a><p class="size-small"><span>&copy; 2020 John Doe</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            site: {
+                url: 'http://yoursite.com',
+                external_link: {"enable":true,"exclude":[]}
+            },
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to Top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
